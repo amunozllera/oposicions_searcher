@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa de Catalunya amb oposicions</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h2 class="titulo">Mapa d'oposicions disponibles a Catalunya</h2>
+  </br>
+  <div class="filters-wrapper">
+    <div class="filter-group">
+      <label for="dateFilter">Data Anunci</label>
+      <input type="date" id="dateFilter" />
+      <span></span>   <div id="dateFilterLabel" class="fecha-es"></div> <!-- Aquí se muestra DD/MM/YYYY -->
+    </div>
+    <div class="filter-group">
+      <label for="dateFilterTermini">Data Termini</label>
+      <input type="date" id="dateFilterTermini" />
+      <div id="dateFilterTerminiLabel" class="fecha-es"></div>
+    </div>
+    <div class="filter-group">
+      <label for="resumFilter">Paraula clau al resum</label>
+      <input type="text" id="resumFilter" placeholder="p. ex. administració" />
+    </div>
+
+    <div class="filter-group">
+      <label for="ensFilter">Nom de l'ens</label>
+      <input type="text" id="ensFilter" placeholder="p. ex. ajuntament" />
+    </div>
+
+    <div class="filter-group">
+      <label for="limitFilter">Límit</label>
+      <input type="number" id="limitFilter" min="1" max="1000" />
+    </div>
+
+    <button id="searchBtn">Cercar</button>
+  </div>
+
+  <div class="top-controls">
+    <div id="coords">Lat: -, Lng: -</div>
+  
+    <div class="autocomplete-wrapper">
+      <input type="text" id="municipiInput" placeholder="Escribe un municipi..." autocomplete="off" />
+      <div id="autocomplete-list" class="autocomplete-items"></div>
+    </div>
+  
+    <div class="distance-filter">
+      <label for="distanceInput">Sin límite</label>
+      <input type="number" id="distanceInput" min="0" placeholder="Distancia" />
+      <span class="unit">KM</span>
+    </div>
+  </div>
+  
+  <div id="map">
+  </div>
+
+  <div class="titulo-contenedor" style="display:flex; align-items:center; gap:10px;">
+    <h2 class="titulo">Oposicions disponibles</h2>
+    <div id="limitCountDisplay" style="font-size: 0.9rem; color: #555;"></div>
+  </div>
+
+  <div id="oposicionsList" class="oposicions-list"></div>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
+  ></script>
+
+  <!-- Script personalizado -->
+  <script src="src/main.js"></script>
+
+</body>
+</html>
