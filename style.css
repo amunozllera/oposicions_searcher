@@ -285,3 +285,17 @@ html, body {
 .limitCountDisplay{
   margin-left: 100px;
 }
+
+.sort-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 1rem 1rem;
+}
+
+#sortSelect {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}

@@ -81,7 +81,7 @@ function mostrarOposicions(lista) {
       <div class="oposicio-info">
         <strong>Ajuntament:</strong> ${opos.nom}<br>
         <strong>Data:</strong> ${new Date(opos.data_publicacio).toLocaleDateString()}
-        <strong>Data termini:</strong> ${new Date(opos.data_venciment).toLocaleDateString()}
+        <strong>Data termini:</strong> ${opos.data_venciment ? new Date(opos.data_venciment).toLocaleDateString() : 'No hi ha data'}
       </div>
       <a class="oposicio-link" href="${opos.enllac}" target="_blank">Veure més</a>
     `;
@@ -260,7 +260,7 @@ async function fetchData() {
     lng: parseFloat(item["__select_alias8__"])
   }));
 
-  mostrarOposicions(oposicions)
+  ordenarOposicions('asc');
   await fetchCount();
 
   return data;
@@ -386,3 +386,17 @@ function inicializarFiltros() {
 
 // Llamar al cargar
 inicializarFiltros();
+
+function ordenarOposicions(order) {
+  oposicions.sort((a, b) => {
+    const fechaA = new Date(a.data_venciment || '2100-01-01');
+    const fechaB = new Date(b.data_venciment || '2100-01-01');
+    return order === 'asc' ? fechaA - fechaB : fechaB - fechaA;
+  });
+  mostrarOposicions(oposicions);
+}
+
+// Evento de cambio en el selector
+document.getElementById('sortSelect').addEventListener('change', (e) => {
+  ordenarOposicions(e.target.value);
+});
