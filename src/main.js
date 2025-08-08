@@ -75,7 +75,7 @@ function mostrarOposicions(lista) {
   lista.forEach(opos => {
     const card = document.createElement('div');
     card.className = 'oposicio-card';
-    console.log(opos)
+
     card.innerHTML = `
       <div class="oposicio-title">${opos.resum}</div>
       <div class="oposicio-info">
