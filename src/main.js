@@ -75,12 +75,13 @@ function mostrarOposicions(lista) {
   lista.forEach(opos => {
     const card = document.createElement('div');
     card.className = 'oposicio-card';
-
+    console.log(opos)
     card.innerHTML = `
       <div class="oposicio-title">${opos.resum}</div>
       <div class="oposicio-info">
         <strong>Ajuntament:</strong> ${opos.nom}<br>
         <strong>Data:</strong> ${new Date(opos.data_publicacio).toLocaleDateString()}
+        <strong>Data termini:</strong> ${new Date(opos.data_venciment).toLocaleDateString()}
       </div>
       <a class="oposicio-link" href="${opos.enllac}" target="_blank">Veure més</a>
     `;
@@ -177,8 +178,6 @@ function setActive(items) {
   }
 }
 
-// const url = "https://analisi.transparenciacatalunya.cat/api/v3/views/a2hm-uzyj/query.json?query=SELECT%20%60resum%60%20as%20__select_alias__%2C%20%60data_pub%60%20as%20__select_alias1__%2C%20%60data_darrer_anunci%60%20as%20__select_alias2__%2C%20%60enlla%60%20as%20__select_alias3__%2C%20%60codi_ens%60%20as%20__select_alias4__%2C%20%60nom_ens%60%20as%20__select_alias5__%2C%20%60termini_presentaci_%60%20as%20__select_alias6__%2C%20%60latitud%60%20as%20__select_alias7__%2C%20%60longitud%60%20as%20__select_alias8__%2C%20%60geocoded%60%20as%20__select_alias9__%20WHERE%20((%60data_darrer_anunci%60%20%3E%20%272025-07-16%27)%20AND%20%60data_darrer_anunci%60%20IS%20NOT%20NULL)%20AND%20(((%60termini_presentaci_%60%20%3E%20%272025-08-06%27)%20AND%20%60termini_presentaci_%60%20IS%20NOT%20NULL)%20OR%20(%60termini_presentaci_%60%20IS%20NULL%20))%20AND%20(upper(%60nom_ens%60)%20LIKE%20%27%25AJUNTAMENT%25%27)%20AND%20(upper(%60resum%60)%20LIKE%20%27%25ADMINISTRACI%25%27)%20LIMIT%20100";
-
 const today = new Date();
 
 // Fecha dos meses atrás
@@ -267,6 +266,13 @@ async function fetchData() {
   return data;
 }
 
+function actualizarLimitCount() {
+  const display = document.getElementById('limitCountDisplay');
+  if (!display) return;
+
+  display.textContent = `Es mostren ${filters.limit} de  ${filters.count}`;
+}
+
 async function fetchCount() {
 
   const countQuery = `
@@ -305,20 +311,18 @@ async function fetchCount() {
 
   filters.count = data[0].__count_alias__;
 
-  console.log(filters)
+  actualizarLimitCount();
 }
 
 const searchBtn = document.getElementById('searchBtn');
 
 searchBtn.addEventListener('click', () => {
   // Usamos los IDs correctos según el HTML proporcionado
-  filters.data_darrer_anunci = document.getElementById('dateFilter').value || "2025-07-16";
-  filters.termini_presentaci = document.getElementById('dateFilterTermini').value || "2025-07-16";
-  filters.ens_keyword = document.getElementById('ensFilter').value || "AJUNTAMENT";
-  filters.resum_keyword = document.getElementById('resumFilter').value || "ADMIN";
+  filters.data_darrer_anunci = document.getElementById('dateFilter').value || "";
+  filters.termini_presentaci = document.getElementById('dateFilterTermini').value || "";
+  filters.ens_keyword = document.getElementById('ensFilter').value || "";
+  filters.resum_keyword = document.getElementById('resumFilter').value || "";
   filters.limit = parseInt(document.getElementById('limitFilter').value) || 100;
-
-  console.log(filters); // <- Arreglado typo
 
   fetchData();
 });
@@ -382,25 +386,3 @@ function inicializarFiltros() {
 
 // Llamar al cargar
 inicializarFiltros();
-
-function mostrarFechaFormatoES(idInput, idLabel) {
-  const input = document.getElementById(idInput);
-  const label = document.getElementById(idLabel);
-
-  input.addEventListener('change', () => {
-    const fecha = new Date(input.value);
-    if (!isNaN(fecha)) {
-      label.textContent = fecha.toLocaleDateString('es-ES');
-    } else {
-      label.textContent = '';
-    }
-  });
-
-  // Inicializar con valor actual
-  if (input.value) {
-    const fecha = new Date(input.value);
-    label.textContent = fecha.toLocaleDateString('es-ES');
-  }
-}
-mostrarFechaFormatoES('dateFilter', 'dateFilterLabel');
-mostrarFechaFormatoES('dateFilterTermini', 'dateFilterTerminiLabel');
